@@ -46,13 +46,13 @@ class Highway(Layer):
                  W_regularizer=None, b_regularizer=None, activity_regularizer=None,
                  W_constraint=None, b_constraint=None,
                  bias=True, input_dim=None, **kwargs):
-        self.init = initializations.get(init)
-        self.transform_bias = transform_bias
-        self.activation = activations.get(activation)
+        self.init = initializations.get(init) # 初始化本层中的参数初始化办法
+        self.transform_bias = transform_bias # 是否需要用到偏置
+        self.activation = activations.get(activation) # 选择初始化的激活函数，默认为线性激活函数
 
-        self.W_regularizer = regularizers.get(W_regularizer)
-        self.b_regularizer = regularizers.get(b_regularizer)
-        self.activity_regularizer = regularizers.get(activity_regularizer)
+        self.W_regularizer = regularizers.get(W_regularizer) # 初始化正则的方法---针对权重矩阵
+        self.b_regularizer = regularizers.get(b_regularizer) # 初始化偏置项的正则化方法
+        self.activity_regularizer = regularizers.get(activity_regularizer) # 对激活函数的结果进行约束
 
         self.W_constraint = constraints.get(W_constraint)
         self.b_constraint = constraints.get(b_constraint)

@@ -54,19 +54,19 @@ class Highway(Layer):
         self.b_regularizer = regularizers.get(b_regularizer) # 初始化偏置项的正则化方法
         self.activity_regularizer = regularizers.get(activity_regularizer) # 对激活函数的结果进行约束
 
-        self.W_constraint = constraints.get(W_constraint)
-        self.b_constraint = constraints.get(b_constraint)
+        self.W_constraint = constraints.get(W_constraint) # 对权重矩阵进行约束
+        self.b_constraint = constraints.get(b_constraint) # 对偏置项进行约束
 
-        self.bias = bias
-        self.initial_weights = weights
-        self.input_spec = [InputSpec(ndim=2)]
+        self.bias = bias # 是否需要偏置项
+        self.initial_weights = weights # 有没有给定的初始化参数，按照给定的参数来初始化
+        self.input_spec = [InputSpec(ndim=2)] # 传递输入数据的大小
 
         self.input_dim = input_dim
         if self.input_dim:
             kwargs['input_shape'] = (self.input_dim,)
         super(Highway, self).__init__(**kwargs)
 
-    def build(self, input_shape):
+    def build(self, input_shape): # 建立层的变量，请对照PPT查看。
         input_dim = input_shape[1]
         self.input_spec = [InputSpec(dtype=K.floatx(),
                                      shape=(None, input_dim))]
@@ -109,7 +109,7 @@ class Highway(Layer):
             del self.initial_weights
         self.built = True
 
-    def call(self, x, mask=None):
+    def call(self, x, mask=None): # 根据建立的变量和输入来计算层的输出，请对照PPT查看。
         y = K.dot(x, self.W_carry)
         if self.bias:
             y += self.b_carry
@@ -122,7 +122,7 @@ class Highway(Layer):
         output = act + (1 - transform_weight) * x
         return output
 
-    def get_config(self):
+    def get_config(self): # 本函数的功能是传递一些额外的层的信息，例如：名称，有没有加偏置，有没有加某些约束等等。
         config = {'init': self.init.__name__,
                   'transform_bias': self.transform_bias,
                   'activation': self.activation.__name__,

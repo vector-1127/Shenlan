@@ -1,3 +1,18 @@
+from __future__ import print_function
+import os
+os.environ['KERAS_BACKEND'] = 'theano'
+os.environ['THEANO_FLAGS']='device=gpu1,lib.cnmem=0.25,mode=FAST_RUN,floatX=float32,optimizer=fast_compile'
+from keras.datasets import cifar10
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Convolution2D, MaxPooling2D
+from keras.utils import np_utils
+
+X = np.random.rand(1000,784) # 1000个784维的数据
+
+
+
 # Auto-encoder
 # dimension of code
 encoding_dim = 100
@@ -9,8 +24,7 @@ decoded1 = Dense(784, activation='sigmoid')(encoded1)
 # model
 autoencoder = Model(input=input_img, output=decoded1)
 autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
-
-
+autoencoder.fit(X, X) # 全部选取为默认参数
 
 
 
@@ -25,6 +39,8 @@ decoded = Dense(784, activation='sigmoid')(encoded)
 # model
 regularized_autoencoder = Model(input=input_img, output=decoded)
 regularized_autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+regularized_autoencoder.fit(X, X) # 全部选取为默认参数
+
 
 
 # Sparse Auto-encoder
@@ -38,6 +54,8 @@ decoded = Dense(784, activation='sigmoid')(encoded)
 # model
 sparse_autoencoder = Model(input=input_img, output=decoded)
 sparse_autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+sparse_autoencoder.fit(X, X) # 全部选取为默认参数
+
 
 
 # Denoising Auto-encoder
@@ -51,3 +69,4 @@ decoded = Dense(784, activation='sigmoid')(encoded)
 # model
 denoising_autoencoder = Model(input=input_img, output=decoded)
 denoising_autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+denoising_autoencoder.fit(X, X) # 全部选取为默认参数

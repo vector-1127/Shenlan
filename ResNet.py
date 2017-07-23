@@ -2,7 +2,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-os.environ['KERAS_BACKEND'] = 'tensorflow'
+os.environ['KERAS_BACKEND'] = 'tensorflow' # 本代码依赖于tensorflow
 os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 os.environ['IMAGE_DIM_ORDERING'] = 'tf'
 import tensorflow as tf
@@ -44,14 +44,19 @@ datagen = ImageDataGenerator(
     rescale=0.95,
     zoom_range=[0.85,1.15]
 )
-def _bn_relu(input):
+
+
+# 查看本代码需要和ResNet原文对照查看，以便帮助理解
+
+
+def _bn_relu(input): # 对输入进行BN操作，BN在激活函数之前
     """Helper to build a BN -> relu block
     """
     norm = BatchNormalization(axis=CHANNEL_AXIS)(input)
     return Activation("relu")(norm)
 
 
-def _conv_bn_relu(**conv_params):
+def _conv_bn_relu(**conv_params): # 卷积层后面进行BN
     """Helper to build a conv -> BN -> relu block
     """
     filters = conv_params["filters"]
@@ -71,7 +76,7 @@ def _conv_bn_relu(**conv_params):
     return f
 
 
-def _bn_relu_conv(**conv_params):
+def _bn_relu_conv(**conv_params): # 卷积层之前进行的BN
     """Helper to build a BN -> relu -> conv block.
     This is an improved scheme proposed in http://arxiv.org/pdf/1603.05027v2.pdf
     """
@@ -92,7 +97,7 @@ def _bn_relu_conv(**conv_params):
     return f
 
 
-def _shortcut(input, residual):
+def _shortcut(input, residual): # 相当于整个残差网络的子网络结构，实现y=F(x)+x
     """Adds a shortcut between input and residual block and merges them with "sum"
     """
     # Expand channels of shortcut to match residual.
@@ -117,7 +122,7 @@ def _shortcut(input, residual):
     return add([shortcut, residual])
 
 
-def _residual_block(block_function, filters, repetitions, is_first_layer=False):
+def _residual_block(block_function, filters, repetitions, is_first_layer=False): # 实现残差网络的残差函数F的神经网络
     """Builds a residual block with repeating bottleneck blocks.
     """
     def f(input):
@@ -132,7 +137,7 @@ def _residual_block(block_function, filters, repetitions, is_first_layer=False):
     return f
 
 
-def basic_block(filters, init_strides=(1, 1), is_first_block_of_first_layer=False):
+def basic_block(filters, init_strides=(1, 1), is_first_block_of_first_layer=False): # 搭建一个残差网络的子结构
     """Basic 3 X 3 convolution blocks for use on resnets with layers <= 34.
     Follows improved proposed scheme in http://arxiv.org/pdf/1603.05027v2.pdf
     """
@@ -182,7 +187,7 @@ def bottleneck(filters, init_strides=(1, 1), is_first_block_of_first_layer=False
     return f
 
 
-def _handle_dim_ordering():
+def _handle_dim_ordering(): # 数据的维度
     global ROW_AXIS
     global COL_AXIS
     global CHANNEL_AXIS
@@ -268,7 +273,7 @@ model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accurac
 
 
 
-if not data_augmentation:
+if not data_augmentation: # 数据曾广技术
     print('Not using data augmentation.')
     model.fit(X_train, Y_train,
               batch_size=batch_size,

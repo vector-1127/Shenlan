@@ -1,14 +1,22 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 26 19:12:16 2017
+
+@author: changjianlong
+"""
+
 from __future__ import print_function
 import os
 os.environ['KERAS_BACKEND'] = 'theano'
-os.environ['THEANO_FLAGS']='device=gpu1,lib.cnmem=0.25,mode=FAST_RUN,floatX=float32,optimizer=fast_compile'
+os.environ['THEANO_FLAGS']='device=gpu4,lib.cnmem=0.25,mode=FAST_RUN,floatX=float32,optimizer=fast_compile'
 from keras.datasets import cifar10
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Dense, Dropout, Activation, Flatten,GaussianNoise
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
-import numpy as np
+from keras.layers import Dense, Activation, Flatten, Input
 
 import numpy as np
 import h5py
@@ -25,6 +33,9 @@ import scipy.io as sio
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop
 from keras.layers.advanced_activations import LeakyReLU
+from keras import regularizers
+
+
 
 X = np.random.rand(1000,784) # 1000个784维的数据
 

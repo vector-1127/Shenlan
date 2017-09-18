@@ -1,2 +1,1 @@
-# shenlan
-# 这些是深蓝学院课程中的部分代码。注释我们会逐渐完善。
+# http://www.shenlanxueyuan.com/
